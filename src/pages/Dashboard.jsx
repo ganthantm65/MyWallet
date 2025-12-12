@@ -24,7 +24,7 @@ const Dashboard = () => {
   const fetchDashboardData = async () => {
     setLoading(true);
     try {
-      const accountsUrl = `http://localhost:5000/api/user/${user.id}/accounts`;
+      const accountsUrl = `${import.meta.env.VITE_API_URL}/api/user/${user.id}/accounts`;
       const accountsOptions = {
         method: "GET",
         headers: {
@@ -39,7 +39,7 @@ const Dashboard = () => {
       setAccounts(accountList);
       if (accountList.length > 0) {
         const firstAccountId = accountList[0]._id;
-        const transactionsUrl = `http://localhost:5000/api/transactions/${firstAccountId}`;
+        const transactionsUrl = `${import.meta.env.VITE_API_URL}/api/transactions/${firstAccountId}`;
         const transactionsOptions = {
           method: "GET",
           headers: {
@@ -53,7 +53,7 @@ const Dashboard = () => {
           setTransactions(transactionsData || []);
         }
       }
-      const budgetsUrl = `http://localhost:5000/api/budgets/user/${user.id}`;
+      const budgetsUrl = `${import.meta.env.VITE_API_URL}/api/budgets/user/${user.id}`;
       const budgetsOptions = {
         method: "GET",
         headers: {

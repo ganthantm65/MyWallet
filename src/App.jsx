@@ -7,6 +7,7 @@ import Transactions from './pages/Transactions'
 import Transfer from './pages/Transfer'
 import Budgets from './pages/Budgets'
 import SignUp from './pages/SignUp'
+import HomePage from './pages/HomePage'
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
         <Route path='/transfer-amount' element={<Transfer/>}/>
         <Route path='/budgets' element={<Budgets/>}/>
         <Route path='/signup' element={<SignUp/>}/>
+        <Route path='/' element={<HomePage/>}/>
       </Routes>
     </BrowserRouter>
   )

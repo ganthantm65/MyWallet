@@ -24,7 +24,7 @@ function SignUp() {
   }
   const postCredential=async()=>{
     const user={email,password,name:userName};
-    const url='http://localhost:5000/api/auth/register';
+    const url=`${import.meta.env.VITE_API_URL}/api/auth/register`;
     const header={
       method:"POST",
       headers:{

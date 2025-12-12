@@ -14,7 +14,7 @@ function Transactions() {
   const fetchTransactions = async (accountId) => {
     if (!accountId) return;
     try {
-      const url = `http://localhost:5000/api/transactions/${accountId}`;
+      const url = `${import.meta.env.VITE_API_URL}/api/transactions/${accountId}`;
       const res = await fetch(url, {
         method: "GET",
         headers: {

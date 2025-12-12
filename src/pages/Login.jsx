@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import loginBg from '../assets/login_background.jpg'; 
 import { User,Lock, EyeClosed, Eye, EyeOff } from 'lucide-react';
-import toast from 'react-hot-toast';
+import toast, { ToastBar, Toaster } from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Login() {
@@ -21,7 +21,7 @@ function Login() {
   const validateCredential=async()=>{
     const user={email,password};
     
-    const url='http://localhost:5000/api/auth/login';
+    const url=`${import.meta.env.VITE_API_URL}/api/auth/login`;
     const header={
       method:"POST",
       headers:{
@@ -41,11 +41,12 @@ function Login() {
       toast.success(data.message);
       navigate("/dashboard");
     } catch (error) {      
-      toast.error(error)
+      toast.error(error?.message || "Login failed")
     }
   }
   return (
     <div className="w-screen h-screen flex flex-row">
+      <Toaster/>
       <div className='w-full h-full flex flex-col justify-center items-center gap-3'>
         <h1 className='text-3xl font-bold'>Welcome back</h1>
         <h1 className='text-lg text-gray-500'>Please Enter Valid Credentials</h1>
@@ -92,13 +93,6 @@ function Login() {
                 </div>
               )
           }
-          <div className='w-[380px] flex flex-row justify-between items-center'>
-            <div className='flex flex-row justify-center items-center gap-1'>
-              <input type='checkbox' className='w-4 h-4'/>
-              <p>Remember Me</p>
-            </div>
-            <p className='text-violet-600 cursor-pointer'><a>Forgot password?</a></p>
-          </div>
           <button 
           onClick={validateCredential}
           className='w-96 h-10 bg-gradient-to-r from-violet-500 to-violet-700 text-white rounded-sm cursor-pointer'>Login</button>

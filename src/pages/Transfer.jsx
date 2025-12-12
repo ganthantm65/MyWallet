@@ -36,7 +36,7 @@ function Transfer() {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/transactions", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/transactions`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -148,7 +148,7 @@ function Transfer() {
                   : "bg-violet-700 text-white hover:bg-violet-800"
               }`}
             >
-              {loading ? "Processing..." : "Transfer"}
+              {loading ? "import.metaing..." : "Transfer"}
             </button>
           </form>
         </div>

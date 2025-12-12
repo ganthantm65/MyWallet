@@ -15,7 +15,7 @@ function Budgets() {
   
   const fetchBudgets = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/budgets/user/${user.id}`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/budgets/user/${user.id}`);
       const data = await res.json();
       
       setBudgets(data.budgets || []);
@@ -33,7 +33,7 @@ function Budgets() {
     const budget = { category, amount, month, year, user: user.id };
 
     try {
-      const res = await fetch(`http://localhost:5000/api/budgets/${user.id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/budgets/${user.id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(budget),
@@ -57,7 +57,7 @@ function Budgets() {
     const budget = { category, amount, month, year };
 
     try {
-      const res = await fetch(`http://localhost:5000/api/budgets/update/${editId}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/budgets/update/${editId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(budget),

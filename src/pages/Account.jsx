@@ -15,7 +15,7 @@ function Account() {
 
   const fetchAccounts = async () => {
     try {
-      const url = `http://localhost:5000/api/user/${user.id}/accounts`;
+      const url = `${import.meta.env.VITE_API_URL}/api/user/${user.id}/accounts`;
       const options = {
         method: "GET",
         headers: {
