@@ -12,15 +12,25 @@ function Budgets() {
   const [editId, setEditId] = useState(null);
 
   const user = JSON.parse(localStorage.getItem("user_data"));
-  
+  const token = localStorage.getItem("token");
+
   const fetchBudgets = async () => {
+    if (!user || !token) return;
+
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/budgets/user/${user.id}`);
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/budgets/user/${user._id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
       const data = await res.json();
-      
       setBudgets(data.budgets || []);
-      
-    } catch(error) {
+    } catch {
       toast.error("Failed to fetch budgets");
     }
   };
@@ -30,23 +40,35 @@ function Budgets() {
   }, []);
 
   const addBudget = async () => {
-    const budget = { category, amount, month, year, user: user.id };
+    if (!category || !amount || !month) {
+      toast.error("All fields are required");
+      return;
+    }
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/budgets/${user.id}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(budget),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/budgets`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            category,
+            amount: Number(amount),
+            month,
+            year,
+          }),
+        }
+      );
 
       if (!res.ok) throw new Error();
 
       toast.success("Budget added successfully");
-
       setCategory("");
       setAmount("");
       setMonth("");
-
       fetchBudgets();
     } catch {
       toast.error("Failed to add budget");
@@ -54,19 +76,27 @@ function Budgets() {
   };
 
   const updateBudget = async () => {
-    const budget = { category, amount, month, year };
-
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/budgets/update/${editId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(budget),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/budgets/${editId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            category,
+            amount: Number(amount),
+            month,
+            year,
+          }),
+        }
+      );
 
       if (!res.ok) throw new Error();
 
       toast.success("Budget updated successfully");
-
       setCategory("");
       setAmount("");
       setMonth("");
@@ -88,9 +118,9 @@ function Budgets() {
     <div className="w-screen h-screen flex flex-row bg-gray-50 text-gray-800">
       <SideBar />
 
-      <div className="w-full h-full flex flex-col justify-start items-center overflow-auto">
-        <div className="w-full flex flex-row justify-between items-center p-6 shadow-sm bg-white sticky top-0 z-10">
-          <h1 className="text-4xl font-bold text-gray-800">Budgets</h1>
+      <div className="w-full h-full flex flex-col items-center overflow-auto">
+        <div className="w-full flex justify-between items-center p-6 shadow-sm bg-white sticky top-0 z-10">
+          <h1 className="text-4xl font-bold">Budgets</h1>
         </div>
 
         <div className="w-[70%] bg-white flex flex-col gap-4 rounded-lg shadow-md py-6 px-8 mt-8 mb-10">
@@ -102,24 +132,24 @@ function Budgets() {
             type="text"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full p-3 border border-gray-300 bg-gray-50 rounded-md focus:outline-none"
-            placeholder="Enter Category"
+            className="w-full p-3 border rounded-md"
+            placeholder="Category"
           />
 
           <input
             type="number"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            className="w-full p-3 border border-gray-300 bg-gray-50 rounded-md focus:outline-none"
-            placeholder="Enter Amount"
+            className="w-full p-3 border rounded-md"
+            placeholder="Amount"
           />
 
           <input
             type="text"
             value={month}
             onChange={(e) => setMonth(e.target.value)}
-            className="w-full p-3 border border-gray-300 bg-gray-50 rounded-md focus:outline-none"
-            placeholder="Enter Month"
+            className="w-full p-3 border rounded-md"
+            placeholder="Month"
           />
 
           {editId ? (
@@ -142,55 +172,44 @@ function Budgets() {
         <div className="w-[90%] bg-white rounded-xl shadow-lg p-6 mb-10">
           <h1 className="text-2xl font-bold text-violet-700 mb-4">All Budgets</h1>
 
-          <div className="overflow-x-auto">
-            <table className="w-full border-separate border-spacing-0 rounded-lg overflow-hidden shadow-sm">
-              <thead>
-                <tr className="bg-violet-700 text-white">
-                  <th className="p-4 font-semibold text-left">Category</th>
-                  <th className="p-4 font-semibold text-left">Amount</th>
-                  <th className="p-4 font-semibold text-left">Month</th>
-                  <th className="p-4 font-semibold text-left">Year</th>
-                  <th className="p-4 font-semibold text-center">Action</th>
-                </tr>
-              </thead>
+          <table className="w-full">
+            <thead>
+              <tr className="bg-violet-700 text-white">
+                <th className="p-4 text-left">Category</th>
+                <th className="p-4 text-left">Amount</th>
+                <th className="p-4 text-left">Month</th>
+                <th className="p-4 text-left">Year</th>
+                <th className="p-4 text-center">Action</th>
+              </tr>
+            </thead>
 
-              <tbody>
-                {budgets.map((b, index) => (
-                  <tr
-                    key={b._id}
-                    className={`${
-                      index % 2 === 0 ? "bg-gray-50" : "bg-white"
-                    } hover:bg-violet-100 transition-all`}
-                  >
-                    <td className="p-4 border-b border-gray-200">{b.category}</td>
-                    <td className="p-4 border-b border-gray-200">{b.amount}</td>
-                    <td className="p-4 border-b border-gray-200">{b.month}</td>
-                    <td className="p-4 border-b border-gray-200">{b.year}</td>
-
-                    <td className="p-4 border-b border-gray-200 text-center">
-                      <button
-                        onClick={() => startEdit(b)}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all"
-                      >
-                        Edit
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-
-                {budgets.length === 0 && (
-                  <tr>
-                    <td
-                      colSpan="5"
-                      className="text-center p-6 text-gray-500 italic"
+            <tbody>
+              {budgets.map((b, i) => (
+                <tr key={b._id} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+                  <td className="p-4">{b.category}</td>
+                  <td className="p-4">{b.amount}</td>
+                  <td className="p-4">{b.month}</td>
+                  <td className="p-4">{b.year}</td>
+                  <td className="p-4 text-center">
+                    <button
+                      onClick={() => startEdit(b)}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-lg"
                     >
-                      No budgets added yet.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                      Edit
+                    </button>
+                  </td>
+                </tr>
+              ))}
+
+              {budgets.length === 0 && (
+                <tr>
+                  <td colSpan="5" className="text-center p-6 text-gray-500">
+                    No budgets added yet
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
