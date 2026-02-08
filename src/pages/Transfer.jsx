@@ -148,7 +148,7 @@ function Transfer() {
                   : "bg-violet-700 text-white hover:bg-violet-800"
               }`}
             >
-              {loading ? "import.metaing..." : "Transfer"}
+              {loading ? "Transferring" : "Transfer"}
             </button>
           </form>
         </div>
