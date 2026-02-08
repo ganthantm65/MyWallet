@@ -21,7 +21,7 @@ function AccountUpdate({ account, onClose, onUpdateSuccess }) {
     const accountData = { name, type, accNo, ifsc, PIN: pin, amount: Number(balance), currency };
 
     try {
-      const url = `http://localhost:5000/api/user/accounts/${account._id}`;
+      const url = `${import.meta.env.VITE_API_URL}/api/user/accounts/${account._id}`;
       const options = {
         method: "PUT",
         headers: {

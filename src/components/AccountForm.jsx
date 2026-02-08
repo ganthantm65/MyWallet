@@ -23,7 +23,7 @@ function AccountForm({ isAccountVisible, setAccoutVisible, addAccountToList }) {
     const accountData = { name, type, accNo, ifsc, PIN: pin, amount:Number(balance), currency };
 
     try {
-      const url = `http://localhost:5000/api/user/${user.id}/accounts`;
+      const url = `${import.meta.env.VITE_API_URL}/api/user/${user.id}/accounts`;
       const options = {
         method: "POST",
         headers: {

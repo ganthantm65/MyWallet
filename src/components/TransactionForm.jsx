@@ -13,7 +13,7 @@ function TransactionForm({ accounts, setFormVisible, setTransactions }) {
 
   const handleCreateTransaction = async () => {
     try {
-      const url = "http://localhost:5000/api/transactions";
+      const url = `${import.meta.env.VITE_API_URL}/api/transactions`;
       const options = {
         method: "POST",
         headers: {
