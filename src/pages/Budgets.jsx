@@ -19,7 +19,7 @@ function Budgets() {
 
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/budgets/user/${user._id}`,
+        `${import.meta.env.VITE_API_URL}/api/budgets/user/${user.id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -39,7 +39,7 @@ function Budgets() {
     fetchBudgets();
   }, []);
 
-  const addBudget = async () => {
+  const addBudget = async () => { 
     if (!category || !amount || !month) {
       toast.error("All fields are required");
       return;
@@ -47,7 +47,7 @@ function Budgets() {
 
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/budgets`,
+        `${import.meta.env.VITE_API_URL}/api/budgets/${user.id}`,
         {
           method: "POST",
           headers: {
@@ -78,7 +78,7 @@ function Budgets() {
   const updateBudget = async () => {
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/budgets/${editId}`,
+        `${import.meta.env.VITE_API_URL}/api/budgets/update/${editId}`,
         {
           method: "PUT",
           headers: {
