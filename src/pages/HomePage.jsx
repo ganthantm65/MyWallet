@@ -200,10 +200,12 @@ const HomePage = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="bg-violet-700 rounded-full p-2">
-                  <Wallet className="w-5 h-5 text-white" />
+                <div className="flex items-center justify-">
+                    <Wallet className="text-violet-500 mr-2" size={32} />
+                    <h1 className="text-2xl font-bold font-poppins tracking-wide">
+                      My<span className="text-violet-700">Wallet</span>
+                    </h1>
                 </div>
-                <h3 className="text-xl font-bold">FinanceTracker</h3>
               </div>
               <p className="text-gray-400">
                 Your trusted partner in financial management.
