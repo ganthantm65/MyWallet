@@ -14,6 +14,7 @@ function Budgets() {
   const user = JSON.parse(localStorage.getItem("user_data"));
   const token = localStorage.getItem("token");
 
+  // Fetch Budgets
   const fetchBudgets = async () => {
     if (!user || !token) return;
 
@@ -28,6 +29,8 @@ function Budgets() {
         }
       );
 
+      if (!res.ok) throw new Error();
+
       const data = await res.json();
       setBudgets(data.budgets || []);
     } catch {
@@ -39,7 +42,8 @@ function Budgets() {
     fetchBudgets();
   }, []);
 
-  const addBudget = async () => { 
+  // Add Budget
+  const addBudget = async () => {
     if (!category || !amount || !month) {
       toast.error("All fields are required");
       return;
@@ -75,10 +79,13 @@ function Budgets() {
     }
   };
 
-  const updateBudget = async (b) => {
+  // Update Budget
+  const updateBudget = async () => {
+    if (!editId) return;
+
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/budgets/update/${b.id}`,
+        `${import.meta.env.VITE_API_URL}/api/budgets/update/${editId}`,
         {
           method: "PUT",
           headers: {
@@ -107,11 +114,12 @@ function Budgets() {
     }
   };
 
+  // Start Edit
   const startEdit = (b) => {
     setCategory(b.category);
     setAmount(b.amount);
     setMonth(b.month);
-    setEditId(b.id);
+    setEditId(b._id);
   };
 
   return (
@@ -170,7 +178,9 @@ function Budgets() {
         </div>
 
         <div className="w-[90%] bg-white rounded-xl shadow-lg p-6 mb-10">
-          <h1 className="text-2xl font-bold text-violet-700 mb-4">All Budgets</h1>
+          <h1 className="text-2xl font-bold text-violet-700 mb-4">
+            All Budgets
+          </h1>
 
           <table className="w-full">
             <thead>
@@ -185,9 +195,12 @@ function Budgets() {
 
             <tbody>
               {budgets.map((b, i) => (
-                <tr key={b._id} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+                <tr
+                  key={b._id}
+                  className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}
+                >
                   <td className="p-4">{b.category}</td>
-                  <td className="p-4">{b.amount}</td>
+                  <td className="p-4">₹{b.amount}</td>
                   <td className="p-4">{b.month}</td>
                   <td className="p-4">{b.year}</td>
                   <td className="p-4 text-center">
