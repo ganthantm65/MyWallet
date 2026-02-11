@@ -19,7 +19,7 @@ function Budgets() {
 
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/budgets/user/${user.id}`,
+        `${import.meta.env.VITE_API_URL}/api/budgets/${user.id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -75,10 +75,10 @@ function Budgets() {
     }
   };
 
-  const updateBudget = async () => {
+  const updateBudget = async (b) => {
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/budgets/update/${editId}`,
+        `${import.meta.env.VITE_API_URL}/api/budgets/update/${b.id}`,
         {
           method: "PUT",
           headers: {
@@ -111,7 +111,7 @@ function Budgets() {
     setCategory(b.category);
     setAmount(b.amount);
     setMonth(b.month);
-    setEditId(b._id);
+    setEditId(b.id);
   };
 
   return (
