@@ -53,7 +53,7 @@ const Dashboard = () => {
           setTransactions(transactionsData || []);
         }
       }
-      const budgetsUrl = `${import.meta.env.VITE_API_URL}/api/budgets/user/${user.id}`;
+      const budgetsUrl = `${import.meta.env.VITE_API_URL}/api/budgets/${user.id}`;
       const budgetsOptions = {
         method: "GET",
         headers: {
