@@ -78,8 +78,6 @@ function Budgets() {
       toast.error("Failed to add budget");
     }
   };
-
-  // Update Budget
   const updateBudget = async () => {
     if (!editId) return;
 
